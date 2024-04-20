@@ -92,7 +92,9 @@ class FileServices {
             return {
                 success: true,
                 code: 200,
-                res: response
+                res: [
+                    response
+                ]
             }
         }
         response = await this.getMultipleFiles()
