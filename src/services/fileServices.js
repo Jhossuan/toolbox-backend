@@ -76,30 +76,41 @@ class FileServices {
     }
 
     static async getFormatedFiles(fileName) {
+        try {
+            let response;
+            if(fileName){
+                response = await this.getFilteredFile(fileName)
+                if(!response || response.lines.length === 0){
+                    return {
+                        success: false,
+                        code: 404,
+                        error: {
+                            message: 'Data not found'
+                        }
+                    }
+                }
+                return {
+                    success: true,
+                    code: 200,
+                    res: [
+                        response
+                    ]
+                }
+            }
 
-        let response;
-        if(fileName){
-            response = await this.getFilteredFile(fileName)
-            if(!response || response.lines.length === 0){
+            response = await this.getMultipleFiles()
+            // console.log("response ===>", response)
+
+            if(response.length === 0){
                 return {
                     success: false,
                     code: 404,
                     error: {
-                        message: 'Data not found'
+                        message: "Data not found"
                     }
                 }
             }
-            return {
-                success: true,
-                code: 200,
-                res: [
-                    response
-                ]
-            }
-        }
-        response = await this.getMultipleFiles()
 
-        try {
             return {
                 success: true,
                 code: 200,
@@ -109,7 +120,7 @@ class FileServices {
                 )
             }
         } catch (error) {
-            console.log('Error ======>', error)
+            // console.log('Error ======>', error)
             return {
                 sucess: false,
                 code: 500,
